@@ -83,6 +83,8 @@ while (keepRunning)
 
     try
     {
+        string fullToken = await authService.GetTokenAsync();
+
         switch (action)
         {
             case "0":
@@ -91,6 +93,25 @@ while (keepRunning)
                 break;
 
             case "1":
+                if (string.IsNullOrWhiteSpace(options.LocationId))
+                {
+                    Console.WriteLine("Enter LocationId (or press Enter to use default):");
+                    var locId = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(locId))
+                        options.LocationId = locId;
+                }
+
+                await signalRService.ConnectAsync(fullToken);
+                await signalRService.SubscribeFlightsAsync(options.LocationId);
+
+                Console.WriteLine("Listening for flight updates. Press any key to stop and return to menu...");
+                Console.ReadKey();
+
+                await signalRService.UnSubscribeFlightsAsync(options.LocationId);
+
+                Console.WriteLine("");
+                Console.WriteLine("-----------------------------------------------------------------");
+                break;
             case "2":
                 if (string.IsNullOrWhiteSpace(options.LocationId))
                 {
@@ -100,16 +121,14 @@ while (keepRunning)
                         options.LocationId = locId;
                 }
 
-                string fullToken = await authService.GetTokenAsync();
                 await signalRService.ConnectAsync(fullToken);
+                await signalRService.SubscribeFlightAnnouncementsAsync(options.LocationId);
 
-                if (action == "1")
-                    await signalRService.SubscribeFlightsAsync(options.LocationId);
-                else if (action == "2")
-                    await signalRService.SubscribeAnnouncementsAsync(options.LocationId);
-
-                Console.WriteLine("Listening for messages. Press any key to stop and return to menu...");
+                Console.WriteLine("Listening for announcements. Press any key to stop and return to menu...");
                 Console.ReadKey();
+
+                await signalRService.UnsubscribeFlightAnnouncementsAsync(options.LocationId);
+
                 Console.WriteLine("");
                 Console.WriteLine("-----------------------------------------------------------------");
                 break;
