@@ -2,10 +2,14 @@
 {
     public class Announcement
     {
-        public string Id { get; set; } = string.Empty;
-        public string AnnouncementText { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string FlightNumber { get; set; } = string.Empty;
-        public DateTime GenerationTimeUTC { get; set; }
+        public string? Id { get; set; }
+        public string? FlightId { get; set; }
+        public string? AnnouncementText { get; set; }
+        public string? AudioFileId { get; set; }
+        public bool? IsFlightRelated { get; set; }
+        public List<string>? Zones { get; set; }
+        public DateTime? GenerationTimeUTC { get; set; }
+        public DateTime? GenerationTimeLocal { get; set; }
+        public DateTime? LastUpdatedUTC { get; set; }
     }
 }

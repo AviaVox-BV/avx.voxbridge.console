@@ -61,10 +61,9 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
 
     public async Task SubscribeFlightAnnouncementsAsync(string? locationId)
     {
-        _connection?.On<Announcement[]>("ReceiveFlightAnnouncements", announcements =>
+        _connection?.On<Announcement>("ReceiveFlightAnnouncements", announcement =>
         {
-            foreach (var announcement in announcements)
-                JsonConsoleWriter.Write(announcement);
+            JsonConsoleWriter.Write(announcement);
         });
 
         await _connection!.InvokeAsync("SubscribeToAirlineFlightAnnouncements", locationId ?? _config.LocationId);

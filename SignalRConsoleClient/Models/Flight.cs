@@ -6,7 +6,7 @@
         public required string Direction { get; set; }
         public string? Terminal { get; set; }
         public bool Schengen { get; set; }
-        public DateTime? UtcLastUpdated { get; set; }
+        public DateTime? LastUpdatedUTC { get; set; }
         public required DateTime ScheduledTime { get; set; }
         public DateTime? EstimatedTime { get; set; }
         public DateTime? ActualTime { get; set; }
