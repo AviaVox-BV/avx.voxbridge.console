@@ -51,12 +51,12 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
         await _connection!.InvokeAsync("SubscribeToAirlineFlights", locationId ?? _config.LocationId);
     }
 
-    public async Task UnSubscribeFlightsAsync(string? locationId)
+    public async Task UnsubscribeFlightsAsync(string? locationId)
     {
         if (_connection == null)
             return;
 
-        await _connection!.InvokeAsync("UnSubscribeFromAirlineFlights", locationId ?? _config.LocationId);
+        await _connection!.InvokeAsync("UnsubscribeFromAirlineFlights", locationId ?? _config.LocationId);
     }
 
     public async Task SubscribeFlightAnnouncementsAsync(string? locationId)

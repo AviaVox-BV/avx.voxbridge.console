@@ -107,7 +107,7 @@ while (keepRunning)
                 Console.WriteLine("Listening for flight updates. Press any key to stop and return to menu...");
                 Console.ReadKey();
 
-                await signalRService.UnSubscribeFlightsAsync(options.LocationId);
+                await signalRService.UnsubscribeFlightsAsync(options.LocationId);
 
                 Console.WriteLine("");
                 Console.WriteLine("-----------------------------------------------------------------");
