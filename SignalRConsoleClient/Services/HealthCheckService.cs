@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR.Client;
 ﻿namespace SignalRConsoleClient.Services
 {
     public class HealthCheckService
@@ -16,11 +17,16 @@
             try
             {
                 var token = await _authService.GetTokenAsync();
-                return true;
+                await _signalRService.ConnectAsync(token);
+                return _signalRService.State == HubConnectionState.Connected;
             }
             catch
             {
                 return false;
+            }
+            finally
+            {
+                await _signalRService.DisconnectAsync();
             }
         }
     }
