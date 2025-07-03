@@ -13,5 +13,3 @@ Console test and example projects for internal and external use.
 
    If `ENV` is not set, the application will prompt you to pick one when it starts.
 4. Start the app with `dotnet run --project SignalRConsoleClient`.
-
-The menu includes a `local` option. Ensure a corresponding URL exists in `appsettings.json` or remove that option from `Program.cs` if unused.
