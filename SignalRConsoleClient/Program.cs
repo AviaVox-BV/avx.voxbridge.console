@@ -136,12 +136,17 @@ while (keepRunning)
             case "3":
                 Console.WriteLine("Enter message to echo");
                 var msg = Console.ReadLine();
-                var token = await authService.GetTokenAsync();
-                await signalRService.ConnectAsync(token);
 
                 var healthy = await healthCheckService.CheckConnectionAsync();
                 Console.WriteLine($"Health Check: {(healthy ? "OK" : "Failed")}");
                 Console.WriteLine();
+
+                if (!healthy)
+                    break;
+
+                var token = await authService.GetTokenAsync();
+                await signalRService.ConnectAsync(token);
+
                 try
                 {
                     await signalRService.EchoAsync(msg);

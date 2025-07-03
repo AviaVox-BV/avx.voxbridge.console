@@ -13,6 +13,8 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
     private readonly ILogger<SignalRService> _logger = logger;
     private HubConnection? _connection;
 
+    public HubConnectionState? State => _connection?.State;
+
     public async Task ConnectAsync(string token)
     {
         var url = _config.Environments[Environment.GetEnvironmentVariable("ENV") ?? "local"];
@@ -75,5 +77,22 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
             return;
 
         await _connection!.InvokeAsync("UnsubscribeFromAirlineFlightAnnouncements", locationId ?? _config.LocationId);
+    }
+
+    public async Task DisconnectAsync()
+    {
+        if (_connection == null)
+            return;
+
+        try
+        {
+            await _connection.StopAsync();
+        }
+        finally
+        {
+            await _connection.DisposeAsync();
+            _logger.LogInformation("Disconnected from VoxBridge SignalR hub.");
+            _connection = null;
+        }
     }
 }
