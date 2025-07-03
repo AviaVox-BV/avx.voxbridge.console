@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SignalRConsoleClient.Configuration;
 using SignalRConsoleClient.Services;
 using SignalRConsoleClient.Utils;
@@ -29,25 +30,43 @@ var host = Host.CreateDefaultBuilder(args)
 var options = host.Services.GetRequiredService<CommandLineOptions>();
 options.Parse(args);
 
+var cfg = host.Services.GetRequiredService<IOptions<AppConfig>>().Value;
+bool hasLocal = cfg.Environments.ContainsKey("local");
+
 if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ENV")))
 {
     while (true)
     {
         Console.WriteLine("Choose environment:");
-        Console.WriteLine("1 = Local");
-        Console.WriteLine("2 = Test");
-        Console.WriteLine("3 = Production");
+        if (hasLocal)
+            Console.WriteLine("1 = Local");
+        Console.WriteLine($"{(hasLocal ? 2 : 1)} = Test");
+        Console.WriteLine($"{(hasLocal ? 3 : 2)} = Production");
         Console.WriteLine("0 = Exit");
         var envSelection = Console.ReadLine()?.Trim();
 
-        string? env = envSelection switch
+        string? env = null;
+        if (hasLocal)
         {
-            "1" => "local",
-            "2" => "test",
-            "3" => "prod",
-            "0" => null,
-            _ => null
-        };
+            env = envSelection switch
+            {
+                "1" => "local",
+                "2" => "test",
+                "3" => "prod",
+                "0" => null,
+                _ => null
+            };
+        }
+        else
+        {
+            env = envSelection switch
+            {
+                "1" => "test",
+                "2" => "prod",
+                "0" => null,
+                _ => null
+            };
+        }
 
         if (env == null)
         {
