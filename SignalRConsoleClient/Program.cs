@@ -31,38 +31,47 @@ options.Parse(args);
 
 if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ENV")))
 {
+    var envInfo = host.Services.GetRequiredService<IHostEnvironment>();
+    bool isDev = envInfo.IsDevelopment();
+
     while (true)
     {
+        var envOptions = new Dictionary<string, string>();
+        int i = 1;
+
         Console.WriteLine("Choose environment:");
-        Console.WriteLine("1 = Local");
-        Console.WriteLine("2 = Test");
-        Console.WriteLine("3 = Production");
-        Console.WriteLine("0 = Exit");
-        var envSelection = Console.ReadLine()?.Trim();
 
-        string? env = envSelection switch
+        if (isDev)
         {
-            "1" => "local",
-            "2" => "test",
-            "3" => "prod",
-            "0" => null,
-            _ => null
-        };
-
-        if (env == null)
-        {
-            if (envSelection == "0")
-            {
-                Console.WriteLine("Exiting...");
-                return;
-            }
-
-            Console.WriteLine("Invalid environment selection. Try again.");
-            continue;
+            Console.WriteLine($"{i} = Local");
+            envOptions[i.ToString()] = "local";
+            i++;
         }
 
-        Environment.SetEnvironmentVariable("ENV", env);
-        break;
+        Console.WriteLine($"{i} = Test");
+        envOptions[i.ToString()] = "test";
+        i++;
+
+        Console.WriteLine($"{i} = Production");
+        envOptions[i.ToString()] = "prod";
+
+        Console.WriteLine("0 = Exit");
+
+        var envSelection = Console.ReadLine()?.Trim();
+
+        if (envSelection == "0")
+        {
+            Console.WriteLine("Exiting...");
+            return;
+        }
+
+        if (envSelection != null && envOptions.TryGetValue(envSelection, out var env))
+        {
+            Environment.SetEnvironmentVariable("ENV", env);
+            break;
+        }
+
+        Console.WriteLine("Invalid environment selection. Try again.");
     }
 }
 
