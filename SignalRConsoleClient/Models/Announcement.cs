@@ -5,6 +5,7 @@
         public string? Id { get; set; }
         public string? FlightId { get; set; }
         public string? AnnouncementText { get; set; }
+        public string? Description { get; set; }
         public string? AudioFileId { get; set; }
         public bool? IsFlightRelated { get; set; }
         public List<string>? Zones { get; set; }

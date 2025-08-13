@@ -15,6 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.Development.BAW.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Development.KLM.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
