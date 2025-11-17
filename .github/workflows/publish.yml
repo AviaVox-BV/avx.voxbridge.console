@@ -40,6 +40,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VoxBRIDGEClient
+          name: ${{ steps.publish.outputs.output_dir }}
           path: ${{ steps.publish.outputs.output_dir }}
-          if-no-files-found: error
