@@ -22,28 +22,24 @@ jobs:
         run: dotnet restore avx.voxbridge.console.sln
 
       - name: Publish VoxBRIDGE client
+        id: publish
         run: |
           VERSION=$(cat VERSION)
+          OUTPUT_DIR="VoxBRIDGEClient_${VERSION}_win-x64"
           dotnet publish SignalRConsoleClient/SignalRConsoleClient.csproj \
             --configuration Release \
             --runtime win-x64 \
             --self-contained false \
-            --output publish
-          ZIP_NAME="VoxBRIDGEClient_${VERSION}.zip"
-          cd publish
-          zip -r "../${ZIP_NAME}" .
-          cd ..
-          echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
-        id: publish
+            --output "$OUTPUT_DIR"
+          echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_OUTPUT"
 
-      - name: Verify package exists
+      - name: Verify output
         run: |
-          test -f "${{ steps.publish.outputs.zip_name }}"
-          echo "Package ${{ steps.publish.outputs.zip_name }} created successfully."
+          ls -la "${{ steps.publish.outputs.output_dir }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: VoxBRIDGEClient
-          path: ${{ steps.publish.outputs.zip_name }}
+          path: ${{ steps.publish.outputs.output_dir }}
           if-no-files-found: error
