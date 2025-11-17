@@ -1,0 +1,47 @@
+name: Build and Package VoxBRIDGE Client
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore avx.voxbridge.console.sln
+
+      - name: Publish VoxBRIDGE client
+        run: |
+          VERSION=$(cat VERSION)
+          dotnet publish SignalRConsoleClient/SignalRConsoleClient.csproj \
+            --configuration Release \
+            --output publish
+          ZIP_NAME="VoxBRIDGEClient_${VERSION}.zip"
+          cd publish
+          zip -r "../${ZIP_NAME}" .
+          cd ..
+          echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
+        id: publish
+
+      - name: Verify package exists
+        run: |
+          test -f "${{ steps.publish.outputs.zip_name }}"
+          echo "Package ${{ steps.publish.outputs.zip_name }} created successfully."
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VoxBRIDGEClient
+          path: ${{ steps.publish.outputs.zip_name }}
+          if-no-files-found: error
