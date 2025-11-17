@@ -28,7 +28,7 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
             .Build();
 
         await _connection.StartAsync();
-        _logger.LogInformation("Connected to VoxBridge SignalR hub.");
+        _logger.LogInformation("Connected to VoxBRIDGE SignalR hub.");
     }
 
     public async Task EchoAsync(string? message)
@@ -40,7 +40,6 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
         });
 
         await _connection!.InvokeAsync("Echo", "SignalR Console Client Test", message);
-        _logger.LogInformation("Echo from VoxBridge SignalR Hub.");
     }
 
     public async Task SubscribeFlightsAsync(string? locationId)
@@ -50,7 +49,7 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
             JsonConsoleWriter.Write(flight);
         });
 
-        await _connection!.InvokeAsync("SubscribeToAirlineFlights", locationId ?? _config.LocationId);
+        await _connection!.InvokeAsync("SubscribeToFlights", locationId ?? _config.LocationId);
     }
 
     public async Task UnsubscribeFlightsAsync(string? locationId)
@@ -58,17 +57,18 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
         if (_connection == null)
             return;
 
-        await _connection!.InvokeAsync("UnsubscribeFromAirlineFlights", locationId ?? _config.LocationId);
+        await _connection!.InvokeAsync("UnsubscribeFromFlights", locationId ?? _config.LocationId);
+        _logger.LogInformation("Unsubscribed from flight updates.");
     }
 
     public async Task SubscribeFlightAnnouncementsAsync(string? locationId)
     {
-        _connection?.On<Announcement>("ReceiveFlightAnnouncements", announcement =>
+        _connection?.On<Announcement>("ReceiveAnnouncements", announcement =>
         {
             JsonConsoleWriter.Write(announcement);
         });
 
-        await _connection!.InvokeAsync("SubscribeToAirlineFlightAnnouncements", locationId ?? _config.LocationId);
+        await _connection!.InvokeAsync("SubscribeToAnnouncements", locationId ?? _config.LocationId);
     }
 
     public async Task UnsubscribeFlightAnnouncementsAsync(string? locationId)
@@ -76,7 +76,8 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
         if (_connection == null)
             return;
 
-        await _connection!.InvokeAsync("UnsubscribeFromAirlineFlightAnnouncements", locationId ?? _config.LocationId);
+        await _connection!.InvokeAsync("UnsubscribeFromAnnouncements", locationId ?? _config.LocationId);
+        _logger.LogInformation("Unsubscribed from announcements.");
     }
 
     public async Task DisconnectAsync()
@@ -91,7 +92,7 @@ public class SignalRService(IOptions<AppConfig> config, ILogger<SignalRService> 
         finally
         {
             await _connection.DisposeAsync();
-            _logger.LogInformation("Disconnected from VoxBridge SignalR hub.");
+            _logger.LogInformation("Disconnected from VoxBRIDGE SignalR hub.");
             _connection = null;
         }
     }

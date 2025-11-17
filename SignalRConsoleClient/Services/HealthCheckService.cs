@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.SignalR.Client;
             {
                 var token = await _authService.GetTokenAsync();
                 await _signalRService.ConnectAsync(token);
+
                 return _signalRService.State == HubConnectionState.Connected;
             }
             catch

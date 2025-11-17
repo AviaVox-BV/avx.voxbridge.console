@@ -21,7 +21,8 @@ public class AuthService
             .WithAuthority($"https://login.microsoftonline.com/{_config.TenantId}")
             .Build();
 
-        var result = await app.AcquireTokenForClient(new[] { _config.Scope }).ExecuteAsync();
+        var result = await app.AcquireTokenForClient([_config.Scope]).ExecuteAsync();
+
         return result.AccessToken;
     }
 }

@@ -421,3 +421,4 @@ FodyWeavers.xsd
 /SignalRConsoleClient/Properties/launchSettings.json
 /SignalRConsoleClient/appsettings.Development.BAW.json
 /SignalRConsoleClient/appsettings.Development.KLM.json
+/SignalRConsoleClient/appsettings.Development.AMS.json

@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
 
       - name: Restore dependencies
         run: dotnet restore avx.voxbridge.console.sln
@@ -26,6 +26,8 @@ jobs:
           VERSION=$(cat VERSION)
           dotnet publish SignalRConsoleClient/SignalRConsoleClient.csproj \
             --configuration Release \
+            --runtime win-x64 \
+            --self-contained false \
             --output publish
           ZIP_NAME="VoxBRIDGEClient_${VERSION}.zip"
           cd publish
