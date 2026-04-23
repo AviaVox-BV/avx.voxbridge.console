@@ -7,7 +7,23 @@ Use this client to confirm that your credentials, configuration, and infrastruct
 
 1. Install [\.NET 8](https://dotnet.microsoft.com/).
 2. Edit `SignalRConsoleClient/appsettings.json` to provide your tenant credentials and the URLs for each environment under `Environments`.
-3. Set the environment via the `ENV` variable (`local`, `test` or `prod`). For example:
+3. Set the environment via the `ENV` variable. Supported values are `test` and `prod`, plus `local` only if you have added a `local` entry under `Environments` in `SignalRConsoleClient/appsettings.json`.
+
+   PowerShell:
+
+   ```powershell
+   $env:ENV='test'
+   dotnet run --project SignalRConsoleClient
+   ```
+
+   Windows Command Prompt:
+
+   ```bat
+   set ENV=test
+   dotnet run --project SignalRConsoleClient
+   ```
+
+   Bash:
 
    ```bash
    ENV=test dotnet run --project SignalRConsoleClient
