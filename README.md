@@ -58,6 +58,7 @@ AviaVox will provide you with a small set of confidential settings, including:
 
 These values must be inserted into the included `appsettings.json` file.  
 This file is read automatically when the application starts.
+Ensure that the url endpoints ends with "/airporthub" if it concerns airports or "/airlinehub" for airlines.
 
 ### 2. Run the application
 
