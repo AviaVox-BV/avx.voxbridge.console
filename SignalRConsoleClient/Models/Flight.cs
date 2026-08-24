@@ -3,6 +3,7 @@
     public class Flight
     {
         public string? Id { get; set; }
+        public string? AodbFlightId { get; set; }
         public string? Direction { get; set; }
         public string? Terminal { get; set; }
         public bool Schengen { get; set; }

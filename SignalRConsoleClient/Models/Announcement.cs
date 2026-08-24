@@ -4,6 +4,7 @@
     {
         public string? Id { get; set; }
         public string? FlightId { get; set; }
+        public string? AodbFlightId { get; set; }
         public List<AnnouncementTextObj>? AnnouncementTexts { get; set; }
         public string? Description { get; set; }
         public List<AudioFile>? AudioFiles { get; set; }
